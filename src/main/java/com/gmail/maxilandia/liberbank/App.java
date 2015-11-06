@@ -50,6 +50,9 @@ public class App {
 					RecordParser recordParser = createRecordParser(file);
 					boolean firstLine = true;
 					for(Record lineRecord : recordParser.parseRecords(file)){
+						if(lineRecord.getSubject().startsWith("REFUND.")){
+							continue;
+						}
 						if(firstLine){
 							OpeningBalanceRecord record = new OpeningBalanceRecord(
 								accountName, 

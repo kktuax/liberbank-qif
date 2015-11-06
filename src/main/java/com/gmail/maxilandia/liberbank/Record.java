@@ -1,6 +1,8 @@
 package com.gmail.maxilandia.liberbank;
 
+import gnu.qif.AccountRecord;
 import gnu.qif.BankTransaction;
+import gnu.qif.QIFRecord;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +10,7 @@ import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
-public class Record {
+public class Record extends QIFRecord {
 
 	private Date date;
 	private String subject;
@@ -39,9 +41,16 @@ public class Record {
 		this.balance = balance;
 	}
 	
+	public AccountRecord asAccountRecord(String accountName){
+		AccountRecord record = new AccountRecord(accountName);
+		record.setDescription(subject);
+		record.setStatementBalanceDate(encodeDate(date));
+		record.setStatementBalanceAmount(balance.toString());
+		return record;
+	}
+	
 	public BankTransaction asBankTransaction(String accountName){
 		BankTransaction record = new BankTransaction();
-		record.setAccount(accountName);
 		record.setCategory(subject);
 		record.setDate(date);
 		record.setTotal(amount.floatValue());
